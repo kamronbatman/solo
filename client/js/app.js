@@ -1,0 +1,1 @@
+var mm = angular.module('mmApp', []);
