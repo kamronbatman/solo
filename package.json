@@ -1,0 +1,19 @@
+{
+  "name": "mm",
+  "version": "1.0.0",
+  "description": "Mastermind clone using Angular/HTML",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kamronbatman/MKS-solo.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kamronbatman/MKS-solo/issues"
+  },
+  "homepage": "https://github.com/kamronbatman/MKS-solo#readme"
+}

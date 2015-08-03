@@ -1,0 +1,26 @@
+{
+  "name": "mm",
+  "version": "1.0.0",
+  "homepage": "https://github.com/kamronbatman/MKS-solo",
+  "authors": [
+    "Kamron Batman <kamron.batman@gmail.com>"
+  ],
+  "description": "Mastermine clone using Angular/HTML",
+  "main": "app.js",
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.3",
+    "angular-ui": "~0.4.0",
+    "jquery": "~2.1.4"
+  }
+}
