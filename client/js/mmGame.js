@@ -1,6 +1,6 @@
-angular.module('mm', [])
+angular.module('mmGen', [])
 
-.factory('mmGame' function(){
+.factory('mmGame', function(){
 
   var colors = [
     'red', 'blue', 'yellow', 'orange',
@@ -20,11 +20,15 @@ angular.module('mm', [])
   var minHoles = 4;
   var maxHoles = 5;
 
+  var guessesAllowed = 10;
+
   var game = {
-    newGame: newGame;
-    reset: reset;
-    makeGuess: makeGuess;
-  }
+    newGame: newGame,
+    reset: reset,
+    makeGuess: makeGuess,
+
+    _getGems: getGems,
+  };
 
   game.reset();
 
@@ -63,6 +67,10 @@ angular.module('mm', [])
   }
 
   function newGame() {
+    game.guessesRemaining = guessesAllowed;
+
+    game._getGems();
+
     //Let's generate a code!
     var holes = minHoles + ((maxHoles - minHoles) * game.level/gamesPerHoles|0);
 
@@ -75,15 +83,25 @@ angular.module('mm', [])
 
   function reset() {
     game.level = 0;
-    game.guessesRemaining = 10;
+    game.guessesRemaining = guessesAllowed;
     game.prevGames = [];
   }
 
   //Send in your gems array, and get back a pegs list.
   //Gems are sent in as an array based on the color's index in the game.gems array.
-  function makeGuess(gems, pegs) {
-    //Do gem logic
-    //if (game.guessesRemaining <= 0) return statuses.lost;
+  function makeGuess(gems, pegCB) {
+    var pegs = [];
+    var total = 0;
+    //Let's look through our code, and compare.
+    for ( var i = 0; i < game.code.length; i++)
+    {
+      //Hit!
+      if (game.code[i] === gems[i]) pegs.push(gems[i]), total++;
+      else if (game.code.indexOf(gems[i]) > -1) pegs.push('white');
+      else pegs.push('black');
+    }
+
+    pegCB(pegs,total === game.code.length);
   }
 
   function stepRandomizer(count) {
