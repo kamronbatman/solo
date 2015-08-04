@@ -4,21 +4,23 @@ angular.module('mmGen', [])
 
   var colors = [
     'red', 'blue', 'yellow', 'orange',
-    'white', 'green', 'purple', 'black',
-    'cyan', 'pink', 'magenta', 'sienna',
-    'slategray', 'salmon'
+    'darkgreen', 'purple', 'cyan', 'pink',
+    'magenta', 'sienna', 'slategray', 'salmon',
+    'lightgreen', 'teal'
   ];
 
-  var gamesPerDifficulty = 2;
-  var minDifficulty = 4;  //Minimum number of gems used.
-  var maxDifficulty = colors.length; //Maxmimum number of gems used.
+  var difficulties = [
+  //Holes, Total Colors, Max Colors to Use
+    [4,4,2], [4,4,3], [4,4,4],
+    [4,5,3], [4,5,4], [4,6,4],
+    [4,7,4], [5,5,5], [5,6,5],
+    [5,7,5], [5,8,5], [5,9,5],
+    [5,10,5], [5,11,5], [5,12,5],
+    [5,13,5], [5,14,5]
+  ];
 
-  var minGemsUsed = 2;
-  var maxGemsUsed = 10;
-
-  var gamesPerHoles = 10;
-  var minHoles = 4;
-  var maxHoles = 5;
+  var gamesPerDifficulty = 3;
+  var maxDifficulty = colors.length;
 
   var guessesAllowed = 10;
 
@@ -27,22 +29,22 @@ angular.module('mmGen', [])
     reset: reset,
     makeGuess: makeGuess,
 
-    _getGems: getGems,
+    _getGems: _getGems,
   };
 
   game.reset();
 
   return game;
 
-  function getGems() {
+  function _getGems() {
     //Get a copy of our colors.
     game.gems = colors.slice();
 
-    //Determine difficulty rating
-    var diffRating = game.level/gamesPerDifficulty|0;
+    //Determine level
+    var level = difficulties[Math.min(game.level/gamesPerDifficulty|0,difficulties.length)];
 
-    //Determine the number of gems to REMOVE based on difficulty.
-    var gemCount = maxDifficulty - minDifficulty + diffRating;
+    var gemCount = maxDifficulty - level[1];
+    var usedGemCount = level[1] - level[2];
 
     stepRandomizer(); //Just in case.
 
@@ -55,12 +57,10 @@ angular.module('mmGen', [])
     //Determine which gems are actually used!
     game.usedGems = game.gems.slice();
 
-    var usedGems =  game.usedGems - Math.min( minGemsUsed + game.level/gamesPerDifficulty|0, maxGemsUsed );
-
     stepRandomizer();
 
     //Remove gems until we have only the gems we are actually using!
-    while (usedGems-- > 0) {
+    while (usedGemCount-- > 0) {
       stepRandomizer(3); //Just in case.
       game.usedGems.splice(Math.random()*game.usedGems.length|0,1)
     }
@@ -72,19 +72,22 @@ angular.module('mmGen', [])
     game._getGems();
 
     //Let's generate a code!
-    var holes = minHoles + ((maxHoles - minHoles) * game.level/gamesPerHoles|0);
+    var level = difficulties[Math.min(game.level/gamesPerDifficulty|0,difficulties.length)];
+    var holes = level[0];
 
     game.code = [];
 
     while (holes-- > 0) {
-      game.code.push(Math.random()*game.usedGems.length|0 )
+      game.code.push(game.usedGems[Math.random()*game.usedGems.length|0])
     }
+
+    game.holes = level[0];
   }
 
   function reset() {
     game.level = 0;
     game.guessesRemaining = guessesAllowed;
-    game.prevGames = [];
+    /*game.prevGames = [];*/
   }
 
   //Send in your gems array, and get back a pegs list.
@@ -95,12 +98,12 @@ angular.module('mmGen', [])
     //Let's look through our code, and compare.
     for ( var i = 0; i < game.code.length; i++)
     {
-      //Hit!
       if (game.code[i] === gems[i]) pegs.push(gems[i]), total++;
       else if (game.code.indexOf(gems[i]) > -1) pegs.push('white');
       else pegs.push('black');
     }
 
+    game.guessesRemaining--;
     pegCB(pegs,total === game.code.length);
   }
 

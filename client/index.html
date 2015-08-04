@@ -1,15 +1,64 @@
 <!DOCTYPE html>
 <html ng-app="mmApp">
 <head>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/bower_components/angular-drag-drop/src/angular-drag-drop.css">
+  <link rel="stylesheet" type="text/css" href="css/styles.css">
   <title>Mastermind!</title>
 </head>
 <body>
+  <div ng-controller="mmCtrl" class="leftmargined">
 
-  <div ng-controller="mmCtrl">
+    <div><h1>Mastermind!</h1></div>
+
+    <button class="padded" ng-click="newGame()">New Game</button>
+
+    <div><h3>Level {{game.level}}</h3></div>
+
+    <div class="topmargined bottommargined">
+      <button class="padded" ng-click="submitGuess()" ng-disabled="cantGuess">Guess!</button>
+      <button class="padded" ng-click="nextGame()" ng-show="canPlayNext">Next Game</button>
+    </div>
+    <div><p>Gems</p></div>
+    <div class="container">
+      <div class="peg" ng-repeat="gem in game.gems" drag-container="gem"
+      mime-type="text/x-gem"
+      style="background-color: {{ gem }}">
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="container" ng-repeat="prev in prevGuesses">
+        <div class="slot" ng-repeat="slot in prev"
+        style="background-color: {{ slot.value }}">
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="slot" ng-repeat="slot in guess"
+        drop-container
+        accepts=["text/x-gem"]
+        on-drop="dropped($event,slot,data)"
+        style="background-color: {{ slot.value }}">
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="container" ng-repeat="prev in prevGuesses">
+        <div class="slot" ng-repeat="slot in prev"
+        style="background-color: {{ slot.peg }}">
+        </div>
+      </div>
+    </div>
+
+    <div><h3 class="resultstext">{{results}}</h3></div>
   </div>
 
   <script src="bower_components/jquery/dist/jquery.js"></script>
   <script src="bower_components/angular/angular.js"></script>
+  <!-- <script src="bower_components/angular-animate/angular-animate.js"></script> -->
+  <script src="bower_components/angular-drag-drop/src/angular-drag-drop.js"></script>
   <script src="js/mmGame.js"></script>
   <script src="js/app.js"></script>
 </body>

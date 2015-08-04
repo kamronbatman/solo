@@ -1,0 +1,38 @@
+.leftmargined {
+  margin-left: 10px;
+}
+
+.topmargined {
+  margin-top: 20px;
+}
+
+.bottommargined {
+  margin-bottom: 20px;
+}
+
+.container {
+  width: 200px;
+  float: left;
+}
+
+.resultstext {
+  color: red;
+}
+
+.peg {
+  text-align: center;
+  font-weight: bold;
+  border: 1px black solid;
+  width: 25px;
+  height: 25px;
+  margin: 4px 4px 4px 0px;
+  float: left;
+}
+
+.slot {
+  margin: 4px;
+  width: 25px;
+  height:25px;
+  display:inline-block;
+  border: dotted;
+}
