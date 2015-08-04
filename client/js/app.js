@@ -5,19 +5,36 @@ mm.config(["$locationProvider", function ($locationProvider) {
     enabled: true,
     requireBase: false
   });
+
+  //Gather all of the voices!
+  window.speechSynthesis.getVoices();
 }]);
 
-mm.controller('mmCtrl', ['$scope', 'mmGame', function($scope, mmGame){
+mm.controller('mmCtrl', ['$scope', '$window', 'mmGame', function($scope, $window, mmGame){
+
+  $scope.playVoice = function(msg, rate, pitch, voice) {
+    var vm = new SpeechSynthesisUtterance(msg);
+    vm.voice = speechSynthesis.getVoices()[voice || 19];
+
+    vm.pitch = pitch || 0.5;
+    vm.rate = rate || 0.5;
+    speechSynthesis.speak(vm);
+  }
 
   $scope.newGame = function(reset) {
+    $scope.gameInProgress = true;
     $scope.results = '';
     $scope.cantGuess = true;
     $scope.canPlayNext = false;
-    if (reset) { $scope.prevGuesses = []; $scope.game.reset(); }
+    if (reset) { $scope.game.reset(); }
+
+    $scope.prevGuesses = [];
 
     $scope.game.newGame();
     $scope.level = $scope.game.level;
     $scope.prepGuess();
+
+    $scope.playVoice('Level ' + ($scope.level + 1));
 
     console.log('gems possible', mmGame.gems);
     console.log('gems used', mmGame.usedGems);
@@ -32,15 +49,19 @@ mm.controller('mmCtrl', ['$scope', 'mmGame', function($scope, mmGame){
 
     $scope.game.makeGuess(gems, function(pegs,won){
       if (won) {
-        $scope.results = 'You won!';
+        $scope.results = 'You win!';
+        $scope.playVoice('You win!');
         $scope.canPlayNext = true;
       } else {
         $scope.setGuess(gems, pegs);
 
         if ($scope.game.guessesRemaining === 0) {
           $scope.results = "You lost!";
+          $scope.playVoice('You lost!');
           $scope.cantGuess = true;
           $scope.canPlayNext = false;
+        } else {
+          $scope.playVoice('Ha ha ha ha, feeble human! You will fail!', 1, 0.25, 71);
         }
       }
     });
@@ -52,7 +73,7 @@ mm.controller('mmCtrl', ['$scope', 'mmGame', function($scope, mmGame){
       prevGuess.push({ value: gem, peg: pegs[index] });
     });
 
-    $scope.prevGuesses.push(prevGuess);
+    $scope.prevGuesses.unshift(prevGuess);
 
     if ($scope.game.guessesRemaining > 0) {
       $scope.prepGuess();
@@ -82,5 +103,5 @@ mm.controller('mmCtrl', ['$scope', 'mmGame', function($scope, mmGame){
   $scope.game = mmGame;
   window.game = mmGame;
 
-  $scope.newGame(true);
+  //$scope.newGame(true);
 }]);

@@ -13,46 +13,61 @@
 
     <button ng-click="newGame(true)">New Game</button>
 
-    <div><h3>Level {{level}}</h3></div>
+    <div ng-if="gameInProgress">
 
-    <div class="topmargined bottommargined">
-      <button ng-click="submitGuess()" ng-disabled="cantGuess">Guess!</button>
-      <button class="leftmargined" ng-click="newGame(false)" ng-show="canPlayNext">Next Level!</button>
-    </div>
-    <div><p>Gems</p></div>
-    <div class="container">
-      <div class="peg" ng-repeat="gem in game.gems" drag-container="gem"
-      mime-type="text/x-gem"
-      style="background-color: {{ gem }}">
+      <div><h3>Level {{level+1}}</h3></div>
+
+      <div class="topmargined bottommargined">
+        <button ng-click="submitGuess()" ng-disabled="cantGuess">Guess!</button>
+        <button class="leftmargined" ng-click="newGame(false)" ng-show="canPlayNext">Next Level!</button>
       </div>
-    </div>
-
-    <div class="container">
-      <div class="container" ng-repeat="prev in prevGuesses">
-        <div class="slot" ng-repeat="slot in prev"
-        style="background-color: {{ slot.value }}">
+      <div><p>Gems</p></div>
+      <div class="container">
+        <div class="peg" ng-repeat="gem in game.gems" drag-container="gem"
+        mime-type="text/x-gem"
+        style="background-color: {{ gem }}">
         </div>
       </div>
 
       <div class="container">
-        <div class="slot" ng-repeat="slot in guess"
-        drop-container
-        accepts=["text/x-gem"]
-        on-drop="dropped($event,slot,data)"
-        style="background-color: {{ slot.value }}">
+
+        <div class="container">
+          <div class="slot" ng-repeat="slot in guess"
+          drop-container
+          accepts=["text/x-gem"]
+          on-drop="dropped($event,slot,data)"
+          style="background-color: {{ slot.value }}">
+          </div>
+        </div>
+
+        <div class="container" ng-repeat="prev in prevGuesses">
+          <div class="slot" ng-repeat="slot in prev"
+          style="background-color: {{ slot.value }}">
+          </div>
+        </div>
+
+      </div>
+
+      <div class="container">
+
+        <div class="container">
+          <div class="slot" ng-repeat="slot in guess"
+          style="border: none">
+          </div>
+        </div>
+
+        <div class="container" ng-repeat="prev in prevGuesses">
+          <div class="slot" ng-repeat="slot in prev"
+          style="background-color: {{ slot.peg }}">
+          </div>
         </div>
       </div>
+
+      <div><h3 class="resultstext">{{results}}</h3></div>
+
     </div>
 
-    <div class="container">
-      <div class="container" ng-repeat="prev in prevGuesses">
-        <div class="slot" ng-repeat="slot in prev"
-        style="background-color: {{ slot.peg }}">
-        </div>
-      </div>
-    </div>
 
-    <div><h3 class="resultstext">{{results}}</h3></div>
   </div>
 
   <script src="bower_components/jquery/dist/jquery.js"></script>
