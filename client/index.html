@@ -11,13 +11,13 @@
 
     <div><h1>Mastermind!</h1></div>
 
-    <button class="padded" ng-click="newGame()">New Game</button>
+    <button ng-click="newGame(true)">New Game</button>
 
-    <div><h3>Level {{game.level}}</h3></div>
+    <div><h3>Level {{level}}</h3></div>
 
     <div class="topmargined bottommargined">
-      <button class="padded" ng-click="submitGuess()" ng-disabled="cantGuess">Guess!</button>
-      <button class="padded" ng-click="nextGame()" ng-show="canPlayNext">Next Game</button>
+      <button ng-click="submitGuess()" ng-disabled="cantGuess">Guess!</button>
+      <button class="leftmargined" ng-click="newGame(false)" ng-show="canPlayNext">Next Level!</button>
     </div>
     <div><p>Gems</p></div>
     <div class="container">

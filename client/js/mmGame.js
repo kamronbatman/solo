@@ -86,8 +86,6 @@ angular.module('mmGen', [])
 
   function reset() {
     game.level = 0;
-    game.guessesRemaining = guessesAllowed;
-    /*game.prevGames = [];*/
   }
 
   //Send in your gems array, and get back a pegs list.
@@ -104,6 +102,7 @@ angular.module('mmGen', [])
     }
 
     game.guessesRemaining--;
+    if (total === game.code.length) { game.level++; }
     pegCB(pegs,total === game.code.length);
   }
 

@@ -8,6 +8,22 @@ mm.config(["$locationProvider", function ($locationProvider) {
 }]);
 
 mm.controller('mmCtrl', ['$scope', 'mmGame', function($scope, mmGame){
+
+  $scope.newGame = function(reset) {
+    $scope.results = '';
+    $scope.cantGuess = true;
+    $scope.canPlayNext = false;
+    if (reset) { $scope.prevGuesses = []; $scope.game.reset(); }
+
+    $scope.game.newGame();
+    $scope.level = $scope.game.level;
+    $scope.prepGuess();
+
+    console.log('gems possible', mmGame.gems);
+    console.log('gems used', mmGame.usedGems);
+    console.log('code', mmGame.code);
+  }
+
   $scope.submitGuess = function(){
     var gems = $scope.guess.reduce(function(memo, guess){
       memo.push(guess.value);
@@ -17,12 +33,14 @@ mm.controller('mmCtrl', ['$scope', 'mmGame', function($scope, mmGame){
     $scope.game.makeGuess(gems, function(pegs,won){
       if (won) {
         $scope.results = 'You won!';
+        $scope.canPlayNext = true;
       } else {
         $scope.setGuess(gems, pegs);
 
         if ($scope.game.guessesRemaining === 0) {
           $scope.results = "You lost!";
           $scope.cantGuess = true;
+          $scope.canPlayNext = false;
         }
       }
     });
@@ -64,13 +82,5 @@ mm.controller('mmCtrl', ['$scope', 'mmGame', function($scope, mmGame){
   $scope.game = mmGame;
   window.game = mmGame;
 
-  $scope.game.newGame();
-  $scope.prevGuesses = [];
-  $scope.cantGuess = true;
-
-  console.log('gems possible', mmGame.gems);
-  console.log('gems used', mmGame.usedGems);
-  console.log('code', mmGame.code);
-
-  $scope.prepGuess();
+  $scope.newGame(true);
 }]);
