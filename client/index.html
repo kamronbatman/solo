@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html ng-app="mmApp">
 <head>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,400italic,500,500italic,700,900,700italic,900italic' rel='stylesheet' type='text/css'>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/bower_components/angular-drag-drop/src/angular-drag-drop.css">
+  <link rel="stylesheet" href="css/angular-drag-drop.css">
   <link rel="stylesheet" type="text/css" href="css/styles.css">
   <title>Mastermind!</title>
 </head>
@@ -11,21 +12,23 @@
 
     <div><h1>Mastermind!</h1></div>
 
-    <button ng-click="newGame(true)">New Game</button>
+    <button ng-click="newGame(true)" class="btn btn-primary">New Game</button>
 
     <div ng-if="gameInProgress">
 
       <div><h3>Level {{level+1}}</h3></div>
 
       <div class="topmargined bottommargined">
-        <button ng-click="submitGuess()" ng-disabled="cantGuess">Guess!</button>
-        <button class="leftmargined" ng-click="newGame(false)" ng-show="canPlayNext">Next Level!</button>
+        <button ng-click="submitGuess()" ng-disabled="cantGuess" class="btn btn-primary">Guess!</button>
+        <button class="btn btn-success leftmargined" ng-click="newGame(false)" ng-show="canPlayNext" class="">Next Level!</button>
       </div>
-      <div><p>Gems</p></div>
+
+      <div><h3 class="resultstext">{{results}}</h3></div>
+
       <div class="container">
-        <div class="peg" ng-repeat="gem in game.gems" drag-container="gem"
+        <div class="gem" ng-repeat="gem in game.gems" drag-container="gem"
         mime-type="text/x-gem"
-        style="background-color: {{ gem }}">
+        style="background: radial-gradient(circle at 6px 6px, {{gem}}, #000)">
         </div>
       </div>
 
@@ -36,13 +39,15 @@
           drop-container
           accepts=["text/x-gem"]
           on-drop="dropped($event,slot,data)"
-          style="background-color: {{ slot.value }}">
+          style="background: radial-gradient(circle at 6px 6px, {{slot.value}}, #000)">
           </div>
         </div>
 
+        <!-- style="background-color: {{ slot.value }}"> -->
+
         <div class="container" ng-repeat="prev in prevGuesses">
           <div class="slot" ng-repeat="slot in prev"
-          style="background-color: {{ slot.value }}">
+          style="background: radial-gradient(circle at 6px 6px, {{slot.value}}, #000)">
           </div>
         </div>
 
@@ -58,22 +63,19 @@
 
         <div class="container" ng-repeat="prev in prevGuesses">
           <div class="slot" ng-repeat="slot in prev"
-          style="background-color: {{ slot.peg }}">
+          style="background: radial-gradient(circle at 6px 6px, {{ slot.peg }}, #000)">
           </div>
         </div>
       </div>
-
-      <div><h3 class="resultstext">{{results}}</h3></div>
 
     </div>
 
 
   </div>
 
-  <script src="bower_components/jquery/dist/jquery.js"></script>
-  <script src="bower_components/angular/angular.js"></script>
-  <!-- <script src="bower_components/angular-animate/angular-animate.js"></script> -->
-  <script src="bower_components/angular-drag-drop/src/angular-drag-drop.js"></script>
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+  <script src="js/angular-drag-drop.js"></script>
   <script src="js/mmGame.js"></script>
   <script src="js/app.js"></script>
 </body>

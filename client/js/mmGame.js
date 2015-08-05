@@ -11,23 +11,36 @@ angular.module('mmGen', [])
 
   var difficulties = [
   //Holes, Total Colors, Max Colors to Use
-    [4,4,2], [4,4,3], [4,4,4],
-    [4,5,3], [4,5,4], [4,6,4],
-    [4,7,4], [5,5,5], [5,6,5],
-    [5,7,5], [5,8,5], [5,9,5],
-    [5,10,5], [5,11,5], [5,12,5],
-    [5,13,5], [5,14,5]
+    [4,4,3], [4,5,4], [4,6,4],
+    [4,6,5], [4,6,6], [4,7,6],
+    [4,7,7], [5,8,5], [5,8,6],
+    [5,8,7], [5,8,8], [5,9,6],
+    [5,9,7], [5,9,8], [5,10,10],
+    [5,11,11], [5,12,12], [5,13,13],
+    [5,14,14], [6,14,14], [7,14,14],
+    [8,14,14], [9,14,14], [10,14,14]
   ];
 
-  var gamesPerDifficulty = 3;
+  var taunts = [
+    'Ha ha ha ha, feeble human! You will fail!',
+    'Ha ha ha ha ha ha ha ha ha ha ha, give up human!',
+    'You think you are close?',
+    'Ha ha ha ha, failure is inevitable human!',
+    'Ready to quit? There is no solution!',
+    'Ha ha ha ha, ready to quit?',
+    'You were close! Just kidding!'
+  ]
+
+  var gamesPerDifficulty = 2;
   var maxDifficulty = colors.length;
 
-  var guessesAllowed = 10;
+  var guessesAllowed = 8;
 
   var game = {
     newGame: newGame,
     reset: reset,
     makeGuess: makeGuess,
+    taunts: taunts,
 
     _getGems: _getGems,
   };
@@ -98,7 +111,7 @@ angular.module('mmGen', [])
     {
       if (game.code[i] === gems[i]) pegs.push(gems[i]), total++;
       else if (game.code.indexOf(gems[i]) > -1) pegs.push('white');
-      else pegs.push('black');
+      else pegs.push('none');
     }
 
     game.guessesRemaining--;

@@ -36,9 +36,9 @@ mm.controller('mmCtrl', ['$scope', '$window', 'mmGame', function($scope, $window
 
     $scope.playVoice('Level ' + ($scope.level + 1));
 
-    console.log('gems possible', mmGame.gems);
+/*    console.log('gems possible', mmGame.gems);
     console.log('gems used', mmGame.usedGems);
-    console.log('code', mmGame.code);
+    console.log('code', mmGame.code);*/
   }
 
   $scope.submitGuess = function(){
@@ -58,11 +58,14 @@ mm.controller('mmCtrl', ['$scope', '$window', 'mmGame', function($scope, $window
         if ($scope.game.guessesRemaining === 0) {
           $scope.results = "You lost!";
           $scope.playVoice('You lost!');
-          $scope.cantGuess = true;
-          $scope.canPlayNext = false;
         } else {
-          $scope.playVoice('Ha ha ha ha, feeble human! You will fail!', 1, 0.25, 71);
+          var message = $scope.game.taunts[(Math.random() * $scope.game.taunts.length)|0];
+          console.log(message)
+          $scope.playVoice(message, 1, 0.25, 71);
         }
+
+        $scope.cantGuess = true;
+        $scope.canPlayNext = false;
       }
     });
   }
@@ -83,7 +86,7 @@ mm.controller('mmCtrl', ['$scope', '$window', 'mmGame', function($scope, $window
   $scope.prepGuess = function() {
     $scope.guess = [];
     for (var i = 0; i < $scope.game.holes; i++) {
-      $scope.guess.push({ value: 'transparent' });
+      $scope.guess.push({ value: 'none' });
     }
   }
 
@@ -96,7 +99,7 @@ mm.controller('mmCtrl', ['$scope', '$window', 'mmGame', function($scope, $window
 
   $scope.guessDisabled = function() {
     return $scope.guess.reduce(function(memo, guess){
-      return guess.value === 'transparent' || memo;
+      return guess.value === 'none' || memo;
     }, false);
   }
 
